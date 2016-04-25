@@ -1,4 +1,4 @@
-function [ A time ] =BLAS3LU(A,b)
+function [ A L U time error ] =BLAS3LU(A,b)
 % Block LU factorization with partial pivoting, overwriting L and U on A
 % see ALGORITHM 2.10 in Applied Numerical Linear Algebra, J. Demmel, SIAM
 % (2007), p.74. Size of blocks is b.
@@ -7,6 +7,8 @@ function [ A time ] =BLAS3LU(A,b)
 
 start_time = tic;
 n=length(A);
+Ainit = A;
+
 
 for i=1:b:n-1
     % apply row permutations to A and L
@@ -24,7 +26,17 @@ for i=1:b:n-1
 end
 
 duration = toc(start_time);
-
 if nargout > 1
    time = duration;
+   L=tril(A);
+   U=triu(A);
+   [ linesL colsL ] = size ( U );
+
+    for pos=1:linesL
+    L ( pos,pos ) = 1;
+    end
+    error = norm ( Ainit - L* U ) / norm ( Ainit ); 
+
 end
+
+

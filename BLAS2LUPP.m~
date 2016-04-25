@@ -7,13 +7,11 @@
 % HPC Group, Filipe Oliveira and Sergio Caldas
 %
 
-function [ A L U P time error ]  = BLAS2LUPP(A)
+function [ Ar time L U P error ]  = BLAS2LUPP(A)
 
 [m n] = size(A);
 L = eye(n);
 U = A;
-Ainit = A;
-
 %create diag matrix P
 P=eye(n); 
 
@@ -36,6 +34,7 @@ for i=1:min(m-1,n)
 
 end
 duration = toc(start_time);
+Ar = A
 if nargout > 1
    time = duration;
    L=tril(A);
@@ -45,7 +44,7 @@ if nargout > 1
     for pos=1:linesL
     L ( pos,pos ) = 1;
     end
-    error = norm ( P*Ainit - L* U ); 
+    error = norm ( P*A - L* U ); 
 
 end
 
