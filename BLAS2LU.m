@@ -5,6 +5,7 @@ function A=BLAS2LU(A)
 % This differs from LUfact1 because A may not be square, has m rows and n
 % columns, with m>=n
 
+
 [m n]=size(A);
 for i=1:min(m-1,n)
     % apply row permutations to A and L

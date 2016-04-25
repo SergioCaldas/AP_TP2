@@ -4,7 +4,7 @@ function A=BLAS3LU(A,b)
 % (2007), p.74. Size of blocks is b.
 % Uses BLAS2LU to produce the LU dec. of rectangular submatrices of A
 
-
+start_time = tic;
 n=length(A);
 for i=1:b:n-1
     % apply row permutations to A and L
@@ -16,4 +16,4 @@ for i=1:b:n-1
         A(i+b:n,i+b:n)=A(i+b:n,i+b:n)-A(i+b:n,i:last)*A(i:last,i+b:n); % step 3 (U33)
     end
 end
-    
+tempo = toc(start_time)
