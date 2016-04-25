@@ -1,4 +1,4 @@
-function [ L U P time ] = BLAS3LUPP(A,block_size)
+function [ A time ] = BLAS3LUPP(A,block_size)
 % Block LU factorization with partial pivoting, overwriting L and U on A
 % see ALGORITHM 2.10 in Applied Numerical Linear Algebra, J. Demmel, SIAM
 % (2007), p.74. Size of blocks is b.
@@ -9,28 +9,28 @@ function [ L U P time ] = BLAS3LUPP(A,block_size)
 % HPC Group, Filipe Oliveira and Sergio Caldas
 %
 
-
-
-n=length(A);
 L = eye(n);
 U = A;
 %create diag matrix P
 P=eye(n); 
-start_time = tic;
 
+start_time = tic;
+n=length(A);
 for i=1:block_size:n-1
     
     % apply row permutations to A and L
     last=min(i+block_size-1,n);
     
     [ L_block U_block P_block ] = BLAS2LUPP(A(i:n,i:last));
-   % A(i:n,i:last) = L_block * U_block;
+    A(i:n,i:last) = Lblock * U_block;
+    %A(i:n,i:last) = BLAS2LUPP(A(i:n,i:last)); % step 1 (L22, L32)
 
     % SIZE OF REMAINING BLOCK LARGER THAN b
     if n-i+1 > block_size  
-        L22=L_block+eye(block_size);
-        L(i:last,i+block_size:n)=inv(L22)*U(i:last,i+block_size:n); % step 2 (U22)
-        U(i+block_size:n,i+block_size:n)=U(i+block_size:n,i+block_size:n)-L(i+block_size:n,i:last)*U(i:last,i+block_size:n); % step 3 (U33)
+        A_submatrix = A(i:last,i:last);
+        L22=tril(A_submatrix,-1)+eye(block_size);
+        A(i:last,i+block_size:n)=inv(L22)*A(i:last,i+block_size:n); % step 2 (U22)
+        A(i+block_size:n,i+block_size:n)=A(i+block_size:n,i+block_size:n)-A(i+block_size:n,i:last)*A(i:last,i+block_size:n); % step 3 (U33)
     end
 end
 

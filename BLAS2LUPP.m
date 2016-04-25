@@ -1,15 +1,18 @@
 % LU factorization with partial pivoting, overwriting L and U on A
 % see ALGORITHM 2.9 in Applied Numerical Linear Algebra, J. Demmel, SIAM
 % (2007), p.72
-%
+% 
+% Altered on 25th of April 2016
 % Copyright University of Minho (2016), Computer Science Dpt. 
 % HPC Group, Filipe Oliveira and Sergio Caldas
 %
 
-function [ L U P ] = BLAS2LUPP(A)
+function [ L U P ]  = BLAS2LUPP(A)
 
 [m n] = size(A);
 
+L = eye(n);
+U = A;
 %create diag matrix P
 P=eye(n); 
 
@@ -20,25 +23,16 @@ for i=1:min(m-1,n)
 
     % apply row permutations to A and P
     if p~=i
-        A([i p],:) = A([p i], :);
+        U([i p],:) = U([p i], :);
         P( [i p] , : ) =   P( [p i] , : );
+        L([i,p],1:p-1) =  L([i,p], 1:p-1);
     end
 
-    A(i+1:m,i)=A(i+1:m,i)/A(i,i);
-    if i<n
-        A(i+1:m,i+1:n)=A(i+1:m,i+1:n)-A(i+1:m,i)*A(i,i+1:n);
-    end
+   for h = i+1:n      
+     L(h, i) = U(h, i) / U(i, i);
+     U(h, :) =  U(h, :) - L(h, i)*U(i, :);
+   end
+
 end
-
-%divide A into L and U
-L=tril(A);
-U=triu(A);
-
-
-[ linesL colsL ] = size ( U );
-
-for pos=1:linesL
-    L ( pos,pos ) = 1;
-end
-
+ 
 end

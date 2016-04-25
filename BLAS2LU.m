@@ -4,6 +4,7 @@ function A=BLAS2LU(A)
 % (2007), p.72
 % This differs from LUfact1 because A may not be square, has m rows and n
 % columns, with m>=n
+%
 
 
 [m n]=size(A);

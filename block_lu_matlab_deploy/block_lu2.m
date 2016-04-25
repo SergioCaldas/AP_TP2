@@ -42,6 +42,7 @@ function [LU,piv] = block_lu2(A,blocksize)
 		%do inter-block update, some expensive updates
 		%here, but remember it's just one block
 		A_sub = A(k:k+vb-1, k:k+vb-1);
+        
 		AA = tril_( A_sub ) + eye(vb);
 		temp3 = AA^-1 * A(k:k+vb-1, k+vb:n);
 		A(k:k+vb-1, k+vb:n) = temp3;
