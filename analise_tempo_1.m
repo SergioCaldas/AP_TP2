@@ -27,17 +27,17 @@ matrix_size = 64;
 
 while matrix_size <= max_matrix_size
     A = rand(matrix_size);
-    [ A_3no   L_3no U_3no time_3no error3NOPIVOT  ] = BLAS3LU(A,32);
+    [ A_3no   L_3no U_3no time_3no error3NOPIVOT  ] = BLAS3LU(A,64);
     [ A_2no   L_2no U_2no time_2no error2NOPIVOT ] = BLAS2LU(A);
     
     [ A_3pi  time_3pp error3PIVOT ] = BLAS3LUPP(A,32);
     [ A_2pi  L_2pi U_2pi P_2pi time_2pp error2PIVOT ] = BLAS2LUPP(A);
 
-    error_2NO_PP( pos_ARR ) = error2NOPIVOT;
-    error_2PP( pos_ARR ) = error2PIVOT;
+    time_2NO_PP( pos_ARR ) = time_2no;
+    time_2PP( pos_ARR ) = time_2pp;
     
-    error_3NO_PP( pos_ARR ) = error3NOPIVOT;
-    error_3PP( pos_ARR ) = error3PIVOT;
+    time_3NO_PP( pos_ARR ) = time_3no;
+    time_3PP( pos_ARR ) = time_3pp;
     
     matrix_dimension ( pos_ARR ) = matrix_size;
     matrix_size = matrix_size * 2;
@@ -45,29 +45,33 @@ while matrix_size <= max_matrix_size
 end
 
 FigHandle = figure;
-set(FigHandle, 'Position', [0, 0, 640   , 480]);
+set(FigHandle, 'Position', [0, 0, 640, 480]);
+max_matrix_size = 2048;
 pos_ARR = 1;
+matrix_size = 64;
 
-loglog(matrix_dimension,error_2NO_PP,'s-','Color', color0);
+plot(matrix_dimension,time_2NO_PP,'s-','Color', color0);
 hold on;
-loglog(matrix_dimension,error_3NO_PP,'s-','Color', color1);
+plot(matrix_dimension,time_3NO_PP,'s-','Color', color1);
 hold on;
-loglog(matrix_dimension,error_2PP,'d-','Color', color2);
+plot(matrix_dimension,time_2PP,'d-','Color', color2);
 hold on;
-loglog(matrix_dimension,error_3PP,'d-','Color', color7);
+plot(matrix_dimension,time_3PP,'d-','Color', color7);
 hold on;
 
-%ylim([0 max(error_3PP*1.25)]);
+
+%ylim([0 max(time_3PP*2)]);
 xlim([0 max(matrix_dimension)]);
 
-l = legend('Error for solution without PP -- BLAS2LU', 'Error for solution without PP -- BLAS3LU', 'Error for solution with PP -- BLAS2LUPP', 'Error for solution with PP -- BLAS3LUPP', 'Location', 'northoutside');
+
+l = legend('Time for solution without PP -- BLAS2LU', 'Time for solution without PP -- BLAS3LU', 'Time for solution with PP -- BLAS2LUPP', 'Time for solution with PP -- BLAS3LUPP' );
 
 set(l,'FontSize',12);
 ylabel('Time in sec.');
 set(gca,'Xtick',matrix_dimension);
 
 xlabel('Matrix Dimension');
-t = title({'BLAS2LU, BLAS2LUPP, BLAS3LU, BLAS3LUPP error for solution analysis ','based on matrix dimension, for block size 64'},'interpreter','latex');
+t = title({'BLAS2LU, BLAS2LUPP, BLAS3LU, BLAS3LUPP time for solution analysis ','based on matrix dimension, for block size 64'},'interpreter','latex');
 
 set(t,'FontSize',30);
 set(gca,'fontsize',12);

@@ -15,7 +15,7 @@ U = A;
 Ainit = A;
 
 %create diag matrix P
-P=eye(n); 
+P=eye(m); 
 
 start_time = tic;
 for i=1:min(m-1,n)
@@ -28,15 +28,17 @@ for i=1:min(m-1,n)
         A([i p],:) = A([p i], :);
         P( [i p] , : ) =   P( [p i] , : );
     end
-
+    A(i+1:m,i)=A(i+1:m,i)/A(i,i);
     if i<n
         A(i+1:m,i+1:n)=A(i+1:m,i+1:n)-A(i+1:m,i)*A(i,i+1:n);
     end
-   
-
 end
+
 duration = toc(start_time);
-if nargout > 1
+if nargout == 2
+    L = P;
+end
+if nargout > 2
    time = duration;
    L=tril(A);
    U=triu(A);
@@ -45,7 +47,6 @@ if nargout > 1
     for pos=1:linesL
     L ( pos,pos ) = 1;
     end
-    error = norm ( P*Ainit - L* U ); 
-
+    error = norm ( P * Ainit - L * U ) / norm(Ainit); 
 end
 

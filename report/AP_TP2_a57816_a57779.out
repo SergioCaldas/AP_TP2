@@ -1,0 +1,9 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{LU Factorisation without Partial Pivoting}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{LU Factorisation with Partial Pivoting}{section.1}% 3
+\BOOKMARK [1][-]{section.2}{Hardware characterisation}{}% 4
+\BOOKMARK [1][-]{section.3}{Changes made in the provided code}{}% 5
+\BOOKMARK [1][-]{section.4}{Error calculation for the final matrices}{}% 6
+\BOOKMARK [1][-]{section.5}{Analysing the solutions validity and error percentage}{}% 7
+\BOOKMARK [1][-]{section.6}{Analysing the time for solutions based on algorithm and block dimension}{}% 8
+\BOOKMARK [1][-]{section.7}{Conclusion}{}% 9

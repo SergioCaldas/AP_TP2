@@ -29,8 +29,7 @@ if nargout > 1
     for pos=1:linesL
     L ( pos,pos ) = 1;
     end
-    Ainit = A;
-   error = norm ( Ainit - L* U ) / norm ( Ainit ); 
+    error = norm ( Ainit - L* U ) / norm ( Ainit ); 
    
 end
 
